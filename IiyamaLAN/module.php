@@ -31,6 +31,8 @@ class IiyamaLAN extends IPSModule
         $this->RegisterPropertyInteger('Port', 5000);
         $this->RegisterPropertyInteger('MonitorID', 1);
         $this->RegisterPropertyInteger('Abfrageintervall', 0);
+        $this->RegisterPropertyInteger('UsbCQuellcode', 0);
+        $this->RegisterPropertyInteger('DateimanagerQuellcode', 0);
         $this->RegisterTimer('Statusabfrage', 0, 'IIY_TimerAbfragen($_IPS["TARGET"]);');
         $profile = 'IiyamaLAN.Eingang';
         if (!IPS_VariableProfileExists($profile)) {
@@ -68,6 +70,27 @@ class IiyamaLAN extends IPSModule
         $seconds = $this->ReadPropertyInteger('Abfrageintervall');
         $this->SetTimerInterval('Statusabfrage', $valid && $seconds >= 1 && $seconds <= 86400 ? 1000 * $seconds : 0);
         $this->SetStatus($valid ? 102 : 201);
+    }
+
+    public function GetConfigurationForm(): string
+    {
+        $form = json_decode(file_get_contents(__DIR__ . '/form.json'), true, 512, JSON_THROW_ON_ERROR);
+        $fields = [
+            'UsbCButton' => $this->sourceButton($this->ReadPropertyInteger('UsbCQuellcode')),
+            'DateimanagerButton' => $this->sourceButton($this->ReadPropertyInteger('DateimanagerQuellcode'))
+        ];
+        if ($this->validConfiguration()) {
+            try {
+                $fields += $this->scheduleFormFields(1);
+            } catch (RuntimeException $error) {
+                $fields['PlanStatus'] = [
+                    'caption' => 'Zeitplan 1 konnte nicht geladen werden. ' . $error->getMessage(),
+                    'visible' => true
+                ];
+            }
+        }
+        $this->fillFormFields($form['actions'], $fields);
+        return json_encode($form, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE);
     }
 
     public function RequestAction($Ident, $Value): void
@@ -121,10 +144,12 @@ class IiyamaLAN extends IPSModule
 
     public function EinHDMI1(): void
     {
-        $this->execute(function (): void {
-            $this->setPower(true);
-            $this->setInput(13);
-        });
+        $this->powerOnInput(13);
+    }
+
+    public function EinHDMI2(): void
+    {
+        $this->powerOnInput(6);
     }
 
     public function EingangSetzen(int $Quelle): void
@@ -133,6 +158,12 @@ class IiyamaLAN extends IPSModule
             throw new InvalidArgumentException('Der Quellcode muss ein Byte zwischen 1 und 255 sein.');
         }
         $this->execute(fn() => $this->setInput($Quelle));
+    }
+
+    public function QuellcodeLesen(): string
+    {
+        $source = $this->execute(fn(): int => $this->readInput());
+        return sprintf('Aktueller Quellcode %d (0x%02X)', $source, $source);
     }
 
     public function LautstaerkeSetzen(int $Wert): void
@@ -168,15 +199,11 @@ class IiyamaLAN extends IPSModule
 
     public function ZeitplanFormularLaden(int $Nummer): void
     {
-        $schedule = $this->readScheduleDetails($Nummer);
-        $this->UpdateFormField('PlanEin', 'value', $schedule['start']);
-        $this->UpdateFormField('PlanAus', 'value', $schedule['end']);
-        $this->UpdateFormField('PlanQuelle', 'value', isset(self::SOURCES[$schedule['source']]) ? $schedule['source'] : 0);
-        foreach ($schedule['days'] as $field => $selected) {
-            $this->UpdateFormField($field, 'value', $selected);
+        foreach ($this->scheduleFormFields($Nummer) as $field => $parameters) {
+            foreach ($parameters as $parameter => $value) {
+                $this->UpdateFormField($field, $parameter, $value);
+            }
         }
-        $this->UpdateFormField('PlanStatus', 'caption', $this->formatSchedule($Nummer, $schedule));
-        $this->UpdateFormField('PlanStatus', 'visible', true);
     }
 
     public function ZeitplanSetzen(int $Nummer, string $Ein, string $Aus, int $Quelle, int $Tagesmaske): void
@@ -267,7 +294,7 @@ class IiyamaLAN extends IPSModule
         if (!$this->readPower()) {
             return;
         }
-        $this->SetValue('Eingang', $this->query(0xAD, 1)[0]);
+        $this->readInput();
         $this->readVolume();
         $video = $this->query(0x33, 7);
         $this->SetValue('Helligkeit', $video[0]);
@@ -287,6 +314,21 @@ class IiyamaLAN extends IPSModule
             $shift <= 0x5A => ($shift * 10) . ' s',
             default => sprintf('Code 0x%02X', $shift)
         });
+    }
+
+    private function powerOnInput(int $source): void
+    {
+        $this->execute(function () use ($source): void {
+            $this->setPower(true);
+            $this->setInput($source);
+        });
+    }
+
+    private function readInput(): int
+    {
+        $source = $this->query(0xAD, 1)[0];
+        $this->SetValue('Eingang', $source);
+        return $source;
     }
 
     private function setInput(int $source): void
@@ -351,6 +393,43 @@ class IiyamaLAN extends IPSModule
             $days ? implode(', ', $days) : 'keine Tage',
             $schedule['weekly'] ? 'jede Woche' : 'einmalig'
         );
+    }
+
+    private function scheduleFormFields(int $slot): array
+    {
+        $schedule = $this->readScheduleDetails($slot);
+        $source = $schedule['source'];
+        $fields = [
+            'PlanEin' => ['value' => $schedule['start']],
+            'PlanAus' => ['value' => $schedule['end']],
+            'PlanQuelle' => ['value' => isset(self::SOURCES[$source]) ? $source : 0],
+            'PlanStatus' => ['caption' => $this->formatSchedule($slot, $schedule), 'visible' => true]
+        ];
+        foreach ($schedule['days'] as $field => $selected) {
+            $fields[$field] = ['value' => $selected];
+        }
+        return $fields;
+    }
+
+    private function sourceButton(int $code): array
+    {
+        return [
+            'enabled' => $code >= 1 && $code <= 255,
+            'onClick' => sprintf('IIY_EingangSetzen($id, %d);', $code)
+        ];
+    }
+
+    private function fillFormFields(array &$items, array $fields): void
+    {
+        foreach ($items as &$item) {
+            $name = $item['name'] ?? '';
+            if (isset($fields[$name])) {
+                $item = array_replace($item, $fields[$name]);
+            }
+            if (isset($item['items'])) {
+                $this->fillFormFields($item['items'], $fields);
+            }
+        }
     }
 
     private function writeSchedule(int $slot, array $desired): void

@@ -51,6 +51,38 @@
                     "maximum": 86400
                 }
             ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Quellcodes für USB-C und Datei-Manager",
+            "expanded": false,
+            "items": [
+                {
+                    "type": "Label",
+                    "caption": "Quelle am Bildschirm wählen und unter „Bildschirm bedienen“ ihren Quellcode lesen. 0 bedeutet nicht zugeordnet."
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "NumberSpinner",
+                            "name": "UsbCQuellcode",
+                            "caption": "USB-C",
+                            "minimum": 0,
+                            "maximum": 255,
+                            "width": "165px"
+                        },
+                        {
+                            "type": "NumberSpinner",
+                            "name": "DateimanagerQuellcode",
+                            "caption": "Datei-Manager",
+                            "minimum": 0,
+                            "maximum": 255,
+                            "width": "165px"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "actions": [
@@ -91,10 +123,86 @@
                         },
                         {
                             "type": "Button",
+                            "caption": "Ein und HDMI 2",
+                            "onClick": "IIY_EinHDMI2($id);"
+                        },
+                        {
+                            "type": "Button",
                             "caption": "Standby",
                             "onClick": "IIY_Standby($id);"
                         }
                     ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "Eingang umschalten"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "HDMI 1",
+                            "onClick": "IIY_EingangSetzen($id, 0x0D);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "HDMI 2",
+                            "onClick": "IIY_EingangSetzen($id, 0x06);"
+                        },
+                        {
+                            "type": "Button",
+                            "name": "UsbCButton",
+                            "caption": "USB-C",
+                            "enabled": false
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Webplayer",
+                            "onClick": "IIY_EingangSetzen($id, 0x10);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "CMS",
+                            "onClick": "IIY_EingangSetzen($id, 0x11);"
+                        },
+                        {
+                            "type": "Button",
+                            "name": "DateimanagerButton",
+                            "caption": "Datei-Manager",
+                            "enabled": false
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Medienplayer",
+                            "onClick": "IIY_EingangSetzen($id, 0x16);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "PDF-Abspieler",
+                            "onClick": "IIY_EingangSetzen($id, 0x17);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "Benutzerdefiniert",
+                            "onClick": "IIY_EingangSetzen($id, 0x18);"
+                        }
+                    ]
+                },
+                {
+                    "type": "Button",
+                    "caption": "Aktuellen Quellcode lesen",
+                    "onClick": "echo IIY_QuellcodeLesen($id);"
                 }
             ]
         },

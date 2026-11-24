@@ -42,11 +42,15 @@ Updates findest du in **Modules → Auf Aktualisierung prüfen**. Wenn die Bibli
 
 Das Abfrageintervall wird in Sekunden angegeben. **0** deaktiviert die automatische Abfrage. **Status aktualisieren** löst dieselbe Abfrage manuell aus. Das Modul fragt zuerst den Betriebszustand ab. Im eingeschalteten Zustand folgen Eingang, Ton, Bildwerte, Betriebsstunden, Farbtemperatur, Bildformat und Pixel Shift. Modell, Firmware und LAN-Protokollversion werden separat über **Geräteinformationen aktualisieren** abgefragt.
 
-Unter **Bildschirm bedienen** stehen **Ein und HDMI 1** und **Standby** bereit. Die Variablen unter der Instanz zeigen die zuletzt erfolgreich gelesenen oder bestätigten Werte. **TCP beim letzten Versuch erreichbar**, **Letzter Fehler** und **Letzter bestätigter Betriebsstatus** helfen bei der Fehlersuche.
+Unter **Bildschirm bedienen** stehen **Ein und HDMI 1**, **Ein und HDMI 2** und **Standby** bereit. Die Eingangstasten schalten direkt auf HDMI 1, HDMI 2, Webplayer, CMS, Medienplayer, PDF-Abspieler oder die benutzerdefinierte Quelle. Welche Quellen verfügbar sind, hängt vom Display, der Firmware und der Einrichtung des jeweiligen Players ab.
+
+Für **USB-C** und **Datei-Manager** ist im LH66-Protokoll keine eindeutige Zuordnung angegeben. Wähle die betreffende Quelle am Bildschirm und klicke in Symcon auf **Aktuellen Quellcode lesen**. Trage die angezeigte Dezimalzahl unter **Quellcodes für USB-C und Datei-Manager** ein und klicke auf **Übernehmen**, damit die entsprechende Eingangstaste verfügbar ist. Falls das Display für eine Quelle keinen eigenen Code meldet, muss sie am Bildschirm gewählt werden.
+
+Die Variablen unter der Instanz zeigen die zuletzt erfolgreich gelesenen oder bestätigten Werte. **TCP beim letzten Versuch erreichbar**, **Letzter Fehler** und **Letzter bestätigter Betriebsstatus** helfen bei der Fehlersuche.
 
 ## Wochenzeitplan am Bildschirm
 
-1. Den Abschnitt **Wochenzeitplan am Bildschirm** öffnen und einen Platz von **1 bis 7** wählen.
+1. Beim Öffnen der Instanzkonfiguration wird **Zeitplan 1** vom Bildschirm gelesen. Im Abschnitt **Wochenzeitplan am Bildschirm** kannst du einen anderen Platz von **1 bis 7** wählen.
 2. Beim Wechsel der **Zeitplan-Nr.** lädt Symcon die gespeicherten Ein- und Ausschaltzeiten, den HDMI-Eingang und die Wochentage in die Felder. **Zeitplan lesen** ruft den ausgewählten Platz erneut ab. Unterhalb der Lesetaste erscheint sein Aktivierungsstatus.
 3. Einschaltzeit, Ausschaltzeit, HDMI-Eingang und Wochentage eintragen. Die Einschaltzeit muss am selben Tag vor der Ausschaltzeit liegen.
 4. **Zeitplan speichern und aktivieren** klicken. Das Modul schreibt die Daten, aktiviert den Platz und liest beide Schritte zur Kontrolle zurück. Mit **Zeitplan deaktivieren** lässt sich der gewählte Platz abschalten.
@@ -65,7 +69,9 @@ IIY_GeraeteinformationenAktualisieren(12345);
 IIY_Einschalten(12345);
 IIY_Standby(12345);
 IIY_EinHDMI1(12345);
+IIY_EinHDMI2(12345);
 IIY_EingangSetzen(12345, 6); // HDMI 2
+echo IIY_QuellcodeLesen(12345);
 IIY_LautstaerkeSetzen(12345, 20);
 IIY_AudioausgangSetzen(12345, 20);
 IIY_HelligkeitSetzen(12345, 30);

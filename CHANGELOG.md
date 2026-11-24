@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0 · Build 11 · 2026-11-24
+
+- Beim Öffnen der Instanzkonfiguration wird Zeitplan 1 direkt vom Bildschirm geladen.
+- **Ein und HDMI 2** sowie Tasten zur direkten Eingangswahl ergänzt.
+- Modellabhängige Zuordnung für USB-C und Datei-Manager und Abfrage des aktuellen Quellcodes hinzugefügt.
+
 ## 1.0 · Build 10 · 2026-11-24
 
 - Beim Wechsel der **Zeitplan-Nr.** lädt die Instanz den ausgewählten Zeitplan automatisch in die Felder.

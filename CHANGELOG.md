@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 7 · 2026-11-24
+
+- Die Instanz zeigt unter **Verbindung zum Bildschirm** den Menüpfad zum Aktivieren der LAN-Steuerung an.
+
 ## 1.0 · Build 6 · 2026-11-24
 
 - Der Link **Dokumentation** in der Symcon-Instanz öffnet die Einrichtungsanleitung des Moduls auf GitHub.

@@ -31,6 +31,10 @@
                             "width": "120px"
                         }
                     ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "Am Bildschirm Menü → Gerät → RS232-Weiterleitung / RS232 routing öffnen und LAN RS232 auswählen."
                 }
             ]
         },

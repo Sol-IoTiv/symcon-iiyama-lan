@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 9 · 2026-11-24
+
+- **Zeitplan lesen** übernimmt Uhrzeiten, HDMI-Eingang und Wochentage aus dem gewählten Zeitplan direkt in die Instanzmaske.
+
 ## 1.0 · Build 8 · 2026-11-24
 
 - Den Button **Changelog öffnen** aus der Instanzkonfiguration entfernt. Der Änderungsverlauf ist im README verlinkt.

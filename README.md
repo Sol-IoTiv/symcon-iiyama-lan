@@ -47,7 +47,7 @@ Unter **Bildschirm bedienen** stehen **Ein und HDMI 1** und **Standby** bereit. 
 ## Wochenzeitplan am Bildschirm
 
 1. Den Abschnitt **Wochenzeitplan am Bildschirm** öffnen und einen Platz von **1 bis 7** wählen.
-2. Mit **Zeitplan lesen** den vorhandenen Eintrag ansehen. Das Ergebnis erscheint zur Kontrolle in einem Dialog.
+2. **Zeitplan lesen** übernimmt die gespeicherten Ein- und Ausschaltzeiten, den HDMI-Eingang und die Wochentage in die Felder. Unterhalb der Lesetaste erscheint der geladene Zeitplan mit seinem Aktivierungsstatus.
 3. Einschaltzeit, Ausschaltzeit, HDMI-Eingang und Wochentage eintragen. Die Einschaltzeit muss am selben Tag vor der Ausschaltzeit liegen.
 4. **Zeitplan speichern und aktivieren** klicken. Das Modul schreibt die Daten, aktiviert den Platz und liest beide Schritte zur Kontrolle zurück. Mit **Zeitplan deaktivieren** lässt sich der gewählte Platz abschalten.
 

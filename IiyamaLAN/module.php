@@ -7,7 +7,15 @@ require_once __DIR__ . '/../libs/IiyamaLanProtocol.php';
 class IiyamaLAN extends IPSModule
 {
     private const SOURCES = [13 => 'HDMI 1', 6 => 'HDMI 2'];
-    private const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+    private const SCHEDULE_DAYS = [
+        'PlanMontag' => 'Mo',
+        'PlanDienstag' => 'Di',
+        'PlanMittwoch' => 'Mi',
+        'PlanDonnerstag' => 'Do',
+        'PlanFreitag' => 'Fr',
+        'PlanSamstag' => 'Sa',
+        'PlanSonntag' => 'So'
+    ];
     private const PICTURE_FORMATS = [0 => '4:3', 1 => 'Benutzerdefiniert', 2 => '1:1', 3 => 'Vollbild', 4 => '21:9', 5 => 'Dynamisch', 6 => '16:9'];
     private const COLOR_TEMPERATURES = [
         0 => 'Benutzer 1', 1 => 'Nativ', 2 => '11000 K', 3 => '10000 K', 4 => '9300 K',
@@ -155,25 +163,20 @@ class IiyamaLAN extends IPSModule
 
     public function ZeitplanLesen(int $Nummer): string
     {
-        return $this->execute(function () use ($Nummer): string {
-            [$enabled, $startH, $startM, $endH, $endM, $source, $mask] = $this->readSchedule($Nummer);
-            $days = [];
-            foreach (self::DAYS as $i => $day) {
-                if ($mask & (1 << ($i + 1))) {
-                    $days[] = $day;
-                }
-            }
-            return sprintf(
-                'Zeitplan %d – %s | Ein %s | Aus %s | %s | %s | %s',
-                $Nummer,
-                $enabled ? 'aktiv' : 'deaktiviert',
-                $startH < 24 && $startM < 60 ? sprintf('%02d:%02d', $startH, $startM) : '–',
-                $endH < 24 && $endM < 60 ? sprintf('%02d:%02d', $endH, $endM) : '–',
-                self::SOURCES[$source] ?? sprintf('Quellcode 0x%02X', $source),
-                $days ? implode(', ', $days) : 'keine Tage',
-                $mask & 1 ? 'jede Woche' : 'einmalig'
-            );
-        });
+        return $this->formatSchedule($Nummer, $this->readScheduleDetails($Nummer));
+    }
+
+    public function ZeitplanFormularLaden(int $Nummer): void
+    {
+        $schedule = $this->readScheduleDetails($Nummer);
+        $this->UpdateFormField('PlanEin', 'value', $schedule['start']);
+        $this->UpdateFormField('PlanAus', 'value', $schedule['end']);
+        $this->UpdateFormField('PlanQuelle', 'value', isset(self::SOURCES[$schedule['source']]) ? $schedule['source'] : 0);
+        foreach ($schedule['days'] as $field => $selected) {
+            $this->UpdateFormField($field, 'value', $selected);
+        }
+        $this->UpdateFormField('PlanStatus', 'caption', $this->formatSchedule($Nummer, $schedule));
+        $this->UpdateFormField('PlanStatus', 'visible', true);
     }
 
     public function ZeitplanSetzen(int $Nummer, string $Ein, string $Aus, int $Quelle, int $Tagesmaske): void
@@ -315,6 +318,39 @@ class IiyamaLAN extends IPSModule
     {
         $this->validateSlot($slot);
         return $this->query(0x5B, 8, $slot);
+    }
+
+    private function readScheduleDetails(int $slot): array
+    {
+        [$enabled, $startH, $startM, $endH, $endM, $source, $mask] = $this->execute(fn(): array => $this->readSchedule($slot));
+        $days = [];
+        foreach (array_keys(self::SCHEDULE_DAYS) as $index => $field) {
+            $days[$field] = ($mask & (1 << ($index + 1))) !== 0;
+        }
+
+        return [
+            'enabled' => $enabled !== 0,
+            'start' => $startH < 24 && $startM < 60 ? sprintf('%02d:%02d', $startH, $startM) : '',
+            'end' => $endH < 24 && $endM < 60 ? sprintf('%02d:%02d', $endH, $endM) : '',
+            'source' => $source,
+            'days' => $days,
+            'weekly' => ($mask & 1) !== 0
+        ];
+    }
+
+    private function formatSchedule(int $slot, array $schedule): string
+    {
+        $days = array_intersect_key(self::SCHEDULE_DAYS, array_filter($schedule['days']));
+        return sprintf(
+            'Zeitplan %d – %s | Ein %s | Aus %s | %s | %s | %s',
+            $slot,
+            $schedule['enabled'] ? 'aktiv' : 'deaktiviert',
+            $schedule['start'] === '' ? '–' : $schedule['start'],
+            $schedule['end'] === '' ? '–' : $schedule['end'],
+            self::SOURCES[$schedule['source']] ?? sprintf('Quellcode 0x%02X', $schedule['source']),
+            $days ? implode(', ', $days) : 'keine Tage',
+            $schedule['weekly'] ? 'jede Woche' : 'einmalig'
+        );
     }
 
     private function writeSchedule(int $slot, array $desired): void

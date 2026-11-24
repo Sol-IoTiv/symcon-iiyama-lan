@@ -131,6 +131,10 @@
                                 {
                                     "caption": "HDMI 2",
                                     "value": 6
+                                },
+                                {
+                                    "caption": "Eingang wählen",
+                                    "value": 0
                                 }
                             ],
                             "value": 13,
@@ -219,7 +223,7 @@
                         {
                             "type": "Button",
                             "caption": "Zeitplan lesen",
-                            "onClick": "echo IIY_ZeitplanLesen($id, (int) $PlanNummer);"
+                            "onClick": "IIY_ZeitplanFormularLaden($id, (int) $PlanNummer);"
                         },
                         {
                             "type": "Button",
@@ -227,6 +231,12 @@
                             "onClick": "IIY_ZeitplanDeaktivieren($id, (int) $PlanNummer); echo 'Zeitplan deaktiviert.';"
                         }
                     ]
+                },
+                {
+                    "type": "Label",
+                    "name": "PlanStatus",
+                    "caption": "Geladener Zeitplan",
+                    "visible": false
                 },
                 {
                     "type": "Button",

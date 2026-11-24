@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 12 · 2026-11-24
+
+- **USB-C übernehmen** und **Datei-Manager übernehmen** lesen den aktuellen Display-Quellcode und tragen ihn direkt in das zugehörige Konfigurationsfeld ein.
+
 ## 1.0 · Build 11 · 2026-11-24
 
 - Beim Öffnen der Instanzkonfiguration wird Zeitplan 1 direkt vom Bildschirm geladen.

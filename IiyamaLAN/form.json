@@ -59,7 +59,7 @@
             "items": [
                 {
                     "type": "Label",
-                    "caption": "Quelle am Bildschirm wählen und unter „Bildschirm bedienen“ ihren Quellcode lesen. 0 bedeutet nicht zugeordnet."
+                    "caption": "Quelle am Bildschirm wählen und den aktuellen Code per Taste ins Feld übernehmen. Mit „Übernehmen“ speichern. 0 löscht eine Zuordnung."
                 },
                 {
                     "type": "RowLayout",
@@ -73,12 +73,27 @@
                             "width": "165px"
                         },
                         {
+                            "type": "Button",
+                            "caption": "USB-C übernehmen",
+                            "onClick": "IIY_QuellcodeInsFormularLaden($id, 'USB-C');"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
                             "type": "NumberSpinner",
                             "name": "DateimanagerQuellcode",
                             "caption": "Datei-Manager",
                             "minimum": 0,
                             "maximum": 255,
                             "width": "165px"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "Datei-Manager übernehmen",
+                            "onClick": "IIY_QuellcodeInsFormularLaden($id, 'Datei-Manager');"
                         }
                     ]
                 }

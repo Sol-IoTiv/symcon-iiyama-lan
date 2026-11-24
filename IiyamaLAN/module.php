@@ -166,6 +166,20 @@ class IiyamaLAN extends IPSModule
         return sprintf('Aktueller Quellcode %d (0x%02X)', $source, $source);
     }
 
+    public function QuellcodeInsFormularLaden(string $Quelle): void
+    {
+        $field = match ($Quelle) {
+            'USB-C' => 'UsbCQuellcode',
+            'Datei-Manager' => 'DateimanagerQuellcode',
+            default => throw new InvalidArgumentException('USB-C oder Datei-Manager auswählen.')
+        };
+        $source = $this->execute(fn(): int => $this->readInput());
+        if ($source === 0) {
+            throw new RuntimeException('Das Display meldet keinen aktiven Quellcode.');
+        }
+        $this->UpdateFormField($field, 'value', $source);
+    }
+
     public function LautstaerkeSetzen(int $Wert): void
     {
         $this->setVolume($Wert, 0);

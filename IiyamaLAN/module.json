@@ -1,0 +1,15 @@
+{
+    "$schema": "https://www.symcon.de/assets/files/validation/moduleSchema.json",
+    "id": "{D1BA6BF4-0C15-47D7-BCC6-F1476F54EA41}",
+    "name": "IiyamaLAN",
+    "type": 3,
+    "vendor": "iiyama",
+    "aliases": [
+        "iiyama ProLite LAN"
+    ],
+    "url": "https://iiyama.com/de_de/produkte/prolite-lh4366uhsb-b1ag/",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "IIY"
+}

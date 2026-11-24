@@ -1,0 +1,13 @@
+{
+    "$schema": "https://www.symcon.de/assets/files/validation/librarySchema.json",
+    "id": "{BFA0EF2F-2553-4E85-ADD6-7042DB3E2BA1}",
+    "author": "Sol-IoTiv",
+    "name": "iiyama LAN",
+    "url": "https://github.com/Sol-IoTiv/symcon-iiyama-lan",
+    "compatibility": {
+        "version": "7.0"
+    },
+    "version": "1.0",
+    "build": 5,
+    "date": 1795551786
+}

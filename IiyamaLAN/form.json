@@ -1,0 +1,247 @@
+{
+    "$schema": "https://www.symcon.de/assets/files/validation/formSchema.json",
+    "elements": [
+        {
+            "type": "ExpansionPanel",
+            "caption": "Verbindung zum Bildschirm",
+            "expanded": true,
+            "items": [
+                {
+                    "type": "ValidationTextBox",
+                    "name": "Adresse",
+                    "caption": "IP-Adresse des Bildschirms"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "NumberSpinner",
+                            "name": "Port",
+                            "caption": "TCP-Port",
+                            "minimum": 1,
+                            "maximum": 65535,
+                            "width": "120px"
+                        },
+                        {
+                            "type": "NumberSpinner",
+                            "name": "MonitorID",
+                            "caption": "Monitor-ID",
+                            "minimum": 1,
+                            "maximum": 255,
+                            "width": "120px"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Automatische Statusabfrage",
+            "expanded": true,
+            "items": [
+                {
+                    "type": "NumberSpinner",
+                    "name": "Abfrageintervall",
+                    "caption": "Abfrageintervall in Sekunden (0 = aus)",
+                    "minimum": 0,
+                    "maximum": 86400
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "ExpansionPanel",
+            "caption": "Status und Geräteinformationen",
+            "expanded": true,
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Status aktualisieren",
+                            "onClick": "IIY_Aktualisieren($id);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "Geräteinformationen aktualisieren",
+                            "onClick": "IIY_GeraeteinformationenAktualisieren($id);"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Bildschirm bedienen",
+            "expanded": true,
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Ein und HDMI 1",
+                            "onClick": "IIY_EinHDMI1($id);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "Standby",
+                            "onClick": "IIY_Standby($id);"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Wochenzeitplan am Bildschirm",
+            "expanded": false,
+            "items": [
+                {
+                    "type": "Label",
+                    "caption": "Der Bildschirm speichert und führt den Zeitplan nach seiner eigenen Uhr aus."
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "NumberSpinner",
+                            "name": "PlanNummer",
+                            "caption": "Zeitplan-Nr.",
+                            "minimum": 1,
+                            "maximum": 7,
+                            "value": 1,
+                            "width": "125px"
+                        },
+                        {
+                            "type": "Select",
+                            "name": "PlanQuelle",
+                            "caption": "Eingang",
+                            "options": [
+                                {
+                                    "caption": "HDMI 1",
+                                    "value": 13
+                                },
+                                {
+                                    "caption": "HDMI 2",
+                                    "value": 6
+                                }
+                            ],
+                            "value": 13,
+                            "width": "145px"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "PlanEin",
+                            "caption": "Ein (HH:MM)",
+                            "value": "07:00",
+                            "width": "125px"
+                        },
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "PlanAus",
+                            "caption": "Aus (HH:MM)",
+                            "value": "20:00",
+                            "width": "125px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "Wochentage"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanMontag",
+                            "caption": "Mo",
+                            "value": true
+                        },
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanDienstag",
+                            "caption": "Di",
+                            "value": true
+                        },
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanMittwoch",
+                            "caption": "Mi",
+                            "value": true
+                        },
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanDonnerstag",
+                            "caption": "Do",
+                            "value": true
+                        },
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanFreitag",
+                            "caption": "Fr",
+                            "value": true
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanSamstag",
+                            "caption": "Sa",
+                            "value": false
+                        },
+                        {
+                            "type": "CheckBox",
+                            "name": "PlanSonntag",
+                            "caption": "So",
+                            "value": false
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Zeitplan lesen",
+                            "onClick": "echo IIY_ZeitplanLesen($id, (int) $PlanNummer);"
+                        },
+                        {
+                            "type": "Button",
+                            "caption": "Zeitplan deaktivieren",
+                            "onClick": "IIY_ZeitplanDeaktivieren($id, (int) $PlanNummer); echo 'Zeitplan deaktiviert.';"
+                        }
+                    ]
+                },
+                {
+                    "type": "Button",
+                    "caption": "Zeitplan speichern und aktivieren",
+                    "onClick": "IIY_ZeitplanSetzen($id, (int) $PlanNummer, $PlanEin, $PlanAus, (int) $PlanQuelle, ($PlanMontag ? 2 : 0) | ($PlanDienstag ? 4 : 0) | ($PlanMittwoch ? 8 : 0) | ($PlanDonnerstag ? 16 : 0) | ($PlanFreitag ? 32 : 0) | ($PlanSamstag ? 64 : 0) | ($PlanSonntag ? 128 : 0)); echo 'Zeitplan gespeichert und zurückgelesen.';"
+                }
+            ]
+        }
+    ],
+    "status": [
+        {
+            "code": 102,
+            "icon": "active",
+            "caption": "Instanz eingerichtet"
+        },
+        {
+            "code": 201,
+            "icon": "error",
+            "caption": "IP-Adresse, Port oder Monitor-ID ungültig"
+        }
+    ]
+}

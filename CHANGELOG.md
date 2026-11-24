@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 10 · 2026-11-24
+
+- Beim Wechsel der **Zeitplan-Nr.** lädt die Instanz den ausgewählten Zeitplan automatisch in die Felder.
+
 ## 1.0 · Build 9 · 2026-11-24
 
 - **Zeitplan lesen** übernimmt Uhrzeiten, HDMI-Eingang und Wochentage aus dem gewählten Zeitplan direkt in die Instanzmaske.

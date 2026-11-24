@@ -47,7 +47,7 @@ Unter **Bildschirm bedienen** stehen **Ein und HDMI 1** und **Standby** bereit. 
 ## Wochenzeitplan am Bildschirm
 
 1. Den Abschnitt **Wochenzeitplan am Bildschirm** öffnen und einen Platz von **1 bis 7** wählen.
-2. **Zeitplan lesen** übernimmt die gespeicherten Ein- und Ausschaltzeiten, den HDMI-Eingang und die Wochentage in die Felder. Unterhalb der Lesetaste erscheint der geladene Zeitplan mit seinem Aktivierungsstatus.
+2. Beim Wechsel der **Zeitplan-Nr.** lädt Symcon die gespeicherten Ein- und Ausschaltzeiten, den HDMI-Eingang und die Wochentage in die Felder. **Zeitplan lesen** ruft den ausgewählten Platz erneut ab. Unterhalb der Lesetaste erscheint sein Aktivierungsstatus.
 3. Einschaltzeit, Ausschaltzeit, HDMI-Eingang und Wochentage eintragen. Die Einschaltzeit muss am selben Tag vor der Ausschaltzeit liegen.
 4. **Zeitplan speichern und aktivieren** klicken. Das Modul schreibt die Daten, aktiviert den Platz und liest beide Schritte zur Kontrolle zurück. Mit **Zeitplan deaktivieren** lässt sich der gewählte Platz abschalten.
 

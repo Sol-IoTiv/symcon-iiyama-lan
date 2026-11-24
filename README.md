@@ -2,6 +2,8 @@
 
 Steuert iiyama-Displays über das binäre RS232/LAN-Protokoll per TCP. Das Modul kann den Bildschirm einschalten, in den Standby schalten, den Eingang wechseln, Geräte- und Statuswerte abfragen und Wochenzeitpläne im Display verwalten. Benötigt **IP-Symcon 7.0 oder neuer**.
 
+[Changelog](CHANGELOG.md)
+
 ## Kompatible Displays
 
 **Am Gerät getestet** wurde der **iiyama ProLite LH4366UHSB-B1AG** mit Firmware **LU66M79-B11-19** und LAN-Protokoll **v3.00**.

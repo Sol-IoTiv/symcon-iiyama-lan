@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 13 · 2026-11-24
+
+- **Eingang umschalten** auf HDMI 1 und HDMI 2 reduziert. Die Quellcode-Zuordnung wurde aus der Instanzmaske entfernt.
+
 ## 1.0 · Build 12 · 2026-11-24
 
 - **USB-C übernehmen** und **Datei-Manager übernehmen** lesen den aktuellen Display-Quellcode und tragen ihn direkt in das zugehörige Konfigurationsfeld ein.

@@ -31,8 +31,6 @@ class IiyamaLAN extends IPSModule
         $this->RegisterPropertyInteger('Port', 5000);
         $this->RegisterPropertyInteger('MonitorID', 1);
         $this->RegisterPropertyInteger('Abfrageintervall', 0);
-        $this->RegisterPropertyInteger('UsbCQuellcode', 0);
-        $this->RegisterPropertyInteger('DateimanagerQuellcode', 0);
         $this->RegisterTimer('Statusabfrage', 0, 'IIY_TimerAbfragen($_IPS["TARGET"]);');
         $profile = 'IiyamaLAN.Eingang';
         if (!IPS_VariableProfileExists($profile)) {
@@ -75,21 +73,19 @@ class IiyamaLAN extends IPSModule
     public function GetConfigurationForm(): string
     {
         $form = json_decode(file_get_contents(__DIR__ . '/form.json'), true, 512, JSON_THROW_ON_ERROR);
-        $fields = [
-            'UsbCButton' => $this->sourceButton($this->ReadPropertyInteger('UsbCQuellcode')),
-            'DateimanagerButton' => $this->sourceButton($this->ReadPropertyInteger('DateimanagerQuellcode'))
-        ];
         if ($this->validConfiguration()) {
             try {
-                $fields += $this->scheduleFormFields(1);
+                $fields = $this->scheduleFormFields(1);
             } catch (RuntimeException $error) {
-                $fields['PlanStatus'] = [
-                    'caption' => 'Zeitplan 1 konnte nicht geladen werden. ' . $error->getMessage(),
-                    'visible' => true
+                $fields = [
+                    'PlanStatus' => [
+                        'caption' => 'Zeitplan 1 konnte nicht geladen werden. ' . $error->getMessage(),
+                        'visible' => true
+                    ]
                 ];
             }
+            $this->fillFormFields($form['actions'], $fields);
         }
-        $this->fillFormFields($form['actions'], $fields);
         return json_encode($form, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE);
     }
 
@@ -164,20 +160,6 @@ class IiyamaLAN extends IPSModule
     {
         $source = $this->execute(fn(): int => $this->readInput());
         return sprintf('Aktueller Quellcode %d (0x%02X)', $source, $source);
-    }
-
-    public function QuellcodeInsFormularLaden(string $Quelle): void
-    {
-        $field = match ($Quelle) {
-            'USB-C' => 'UsbCQuellcode',
-            'Datei-Manager' => 'DateimanagerQuellcode',
-            default => throw new InvalidArgumentException('USB-C oder Datei-Manager auswählen.')
-        };
-        $source = $this->execute(fn(): int => $this->readInput());
-        if ($source === 0) {
-            throw new RuntimeException('Das Display meldet keinen aktiven Quellcode.');
-        }
-        $this->UpdateFormField($field, 'value', $source);
     }
 
     public function LautstaerkeSetzen(int $Wert): void
@@ -423,14 +405,6 @@ class IiyamaLAN extends IPSModule
             $fields[$field] = ['value' => $selected];
         }
         return $fields;
-    }
-
-    private function sourceButton(int $code): array
-    {
-        return [
-            'enabled' => $code >= 1 && $code <= 255,
-            'onClick' => sprintf('IIY_EingangSetzen($id, %d);', $code)
-        ];
     }
 
     private function fillFormFields(array &$items, array $fields): void

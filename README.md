@@ -42,9 +42,7 @@ Updates findest du in **Modules → Auf Aktualisierung prüfen**. Wenn die Bibli
 
 Das Abfrageintervall wird in Sekunden angegeben. **0** deaktiviert die automatische Abfrage. **Status aktualisieren** löst dieselbe Abfrage manuell aus. Das Modul fragt zuerst den Betriebszustand ab. Im eingeschalteten Zustand folgen Eingang, Ton, Bildwerte, Betriebsstunden, Farbtemperatur, Bildformat und Pixel Shift. Modell, Firmware und LAN-Protokollversion werden separat über **Geräteinformationen aktualisieren** abgefragt.
 
-Unter **Bildschirm bedienen** stehen **Ein und HDMI 1**, **Ein und HDMI 2** und **Standby** bereit. Die Eingangstasten schalten direkt auf HDMI 1, HDMI 2, Webplayer, CMS, Medienplayer, PDF-Abspieler oder die benutzerdefinierte Quelle. Welche Quellen verfügbar sind, hängt vom Display, der Firmware und der Einrichtung des jeweiligen Players ab.
-
-Für **USB-C** und **Datei-Manager** ist im LH66-Protokoll keine eindeutige Zuordnung angegeben. Wähle die betreffende Quelle am Bildschirm und öffne **Quellcodes für USB-C und Datei-Manager**. Klicke auf **USB-C übernehmen** oder **Datei-Manager übernehmen**, damit der gemeldete Code direkt im passenden Feld steht. Speichere mit **Übernehmen**. Falls das Display für eine Quelle keinen eigenen Code meldet, muss sie am Bildschirm gewählt werden.
+Unter **Bildschirm bedienen** stehen **Ein und HDMI 1**, **Ein und HDMI 2** und **Standby** bereit. Mit **HDMI 1** und **HDMI 2** wechselst du den Eingang direkt.
 
 Die Variablen unter der Instanz zeigen die zuletzt erfolgreich gelesenen oder bestätigten Werte. **TCP beim letzten Versuch erreichbar**, **Letzter Fehler** und **Letzter bestätigter Betriebsstatus** helfen bei der Fehlersuche.
 

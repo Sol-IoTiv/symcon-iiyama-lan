@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0 · Build 8 · 2026-11-24
+
+- Den Button **Changelog öffnen** aus der Instanzkonfiguration entfernt. Der Änderungsverlauf ist im README verlinkt.
+
 ## 1.0 · Build 7 · 2026-11-24
 
 - Die Instanz zeigt unter **Verbindung zum Bildschirm** den Menüpfad zum Aktivieren der LAN-Steuerung an.

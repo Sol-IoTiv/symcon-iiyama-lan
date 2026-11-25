@@ -87,3 +87,7 @@ Bei Hex-Befehlen gibt der dritte Parameter den erwarteten Antwortcode an. **0** 
 FTP lässt sich am Display unter **System → Android-Einstellung → Anzeige der Beschilderung → Server-Einstellungen → FTP** aktivieren. Dort stehen Konto, Passwort, Speicherpfad und FTP-Port. Den Speicherort und die Wiedergabeliste des PDF-Players stellst du unter **Anzeige der Beschilderung → Quelleneinstellungen** ein. Der FTP-Schalter ist in der LAN-Befehlsliste nicht dokumentiert. Das Modul steuert den Eingang. Auf Displays mit eingebautem PDF-Player und der oben verlinkten Quellenbelegung ist der Aufruf `IIY_EingangSetzen(12345, 0x17)`.
 
 [iiyama-Handbuch, FTP und Quelleneinstellungen](https://iiyama.com/f/d20b8feb4feddf498dcc479896838547_lh-43-50-55-65-7566uhsb-usermanual-g.pdf#page=46)
+
+## Fehler und weitere Modelle melden
+
+Melde Fehler und bestätigte Modellkompatibilität über [GitHub Issues](https://github.com/Sol-IoTiv/symcon-iiyama-lan/issues). Gib das genaue Displaymodell, die Firmware, die LAN-Protokollversion, deine Symcon-Version und den Modul-Build an. Beschreibe die Schritte, das erwartete Ergebnis und was das Display tatsächlich macht. Entferne interne IP-Adressen und Zugangsdaten aus Screenshots und Protokollen.

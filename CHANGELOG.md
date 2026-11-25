@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0 · Build 14 · 2026-11-25
+
+- Die Statusabfrage aktualisiert die übrigen Werte auch bei einzelnen abgelehnten oder unvollständigen Antworten. **Letzter Fehler** nennt die fehlgeschlagenen Abfragen.
+- Den Skriptbefehl `IIY_QuellcodeLesen` entfernt.
+
 ## 1.0 · Build 13 · 2026-11-24
 
 - **Eingang umschalten** auf HDMI 1 und HDMI 2 reduziert. Die Quellcode-Zuordnung wurde aus der Instanzmaske entfernt.

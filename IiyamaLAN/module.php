@@ -156,12 +156,6 @@ class IiyamaLAN extends IPSModule
         $this->execute(fn() => $this->setInput($Quelle));
     }
 
-    public function QuellcodeLesen(): string
-    {
-        $source = $this->execute(fn(): int => $this->readInput());
-        return sprintf('Aktueller Quellcode %d (0x%02X)', $source, $source);
-    }
-
     public function LautstaerkeSetzen(int $Wert): void
     {
         $this->setVolume($Wert, 0);
@@ -290,26 +284,49 @@ class IiyamaLAN extends IPSModule
         if (!$this->readPower()) {
             return;
         }
-        $this->readInput();
-        $this->readVolume();
-        $video = $this->query(0x33, 7);
-        $this->SetValue('Helligkeit', $video[0]);
-        $this->SetValue('Kontrast', $video[2]);
-        $this->SetValue('Schaerfe', $video[3]);
-        [$high, $low] = $this->query(0x0F, 2, 0x02);
-        $this->SetValue('Betriebsstunden', ($high << 8) | $low);
 
-        $color = $this->query(0x35, 1)[0];
-        $picture = $this->query(0x3B, 1)[0] & 0x0F;
-        $shift = $this->query(0xB1, 1)[0];
-        $this->SetValue('Farbtemperatur', self::COLOR_TEMPERATURES[$color] ?? sprintf('Code 0x%02X', $color));
-        $this->SetValue('Bildformat', self::PICTURE_FORMATS[$picture] ?? sprintf('Code 0x%02X', $picture));
-        $this->SetValue('PixelShift', match (true) {
-            $shift === 0 => 'Aus',
-            $shift === 0x5B => 'Auto',
-            $shift <= 0x5A => ($shift * 10) . ' s',
-            default => sprintf('Code 0x%02X', $shift)
-        });
+        $reads = [
+            'Eingang' => fn() => $this->SetValue('Eingang', $this->query(0xAD, 1)[0]),
+            'Lautstärke und Audioausgang' => fn() => $this->readVolume(),
+            'Helligkeit, Kontrast und Schärfe' => function (): void {
+                $video = $this->query(0x33, 7);
+                $this->SetValue('Helligkeit', $video[0]);
+                $this->SetValue('Kontrast', $video[2]);
+                $this->SetValue('Schaerfe', $video[3]);
+            },
+            'Betriebsstunden' => function (): void {
+                [$high, $low] = $this->query(0x0F, 2, 0x02);
+                $this->SetValue('Betriebsstunden', ($high << 8) | $low);
+            },
+            'Farbtemperatur' => function (): void {
+                $color = $this->query(0x35, 1)[0];
+                $this->SetValue('Farbtemperatur', self::COLOR_TEMPERATURES[$color] ?? sprintf('Code 0x%02X', $color));
+            },
+            'Bildformat' => function (): void {
+                $picture = $this->query(0x3B, 1)[0] & 0x0F;
+                $this->SetValue('Bildformat', self::PICTURE_FORMATS[$picture] ?? sprintf('Code 0x%02X', $picture));
+            },
+            'Pixel Shift' => function (): void {
+                $shift = $this->query(0xB1, 1)[0];
+                $this->SetValue('PixelShift', match (true) {
+                    $shift === 0 => 'Aus',
+                    $shift === 0x5B => 'Auto',
+                    $shift <= 0x5A => ($shift * 10) . ' s',
+                    default => sprintf('Code 0x%02X', $shift)
+                });
+            }
+        ];
+        $unavailable = [];
+        foreach ($reads as $label => $read) {
+            try {
+                $read();
+            } catch (IiyamaLanCommandResponseException) {
+                $unavailable[] = $label;
+            }
+        }
+        if ($unavailable !== []) {
+            throw new RuntimeException('Status teilweise aktualisiert. Keine verwertbare Antwort für ' . implode(', ', $unavailable) . '.');
+        }
     }
 
     private function powerOnInput(int $source): void
@@ -318,13 +335,6 @@ class IiyamaLAN extends IPSModule
             $this->setPower(true);
             $this->setInput($source);
         });
-    }
-
-    private function readInput(): int
-    {
-        $source = $this->query(0xAD, 1)[0];
-        $this->SetValue('Eingang', $source);
-        return $source;
     }
 
     private function setInput(int $source): void
@@ -454,7 +464,7 @@ class IiyamaLAN extends IPSModule
     {
         $data = substr($this->command($code, $code, ...$args), 7, -1);
         if (strlen($data) < $minimum) {
-            throw new RuntimeException(sprintf('Unvollständige Daten für Befehl 0x%02X.', $code));
+            throw new IiyamaLanCommandResponseException(sprintf('Unvollständige Daten für Befehl 0x%02X.', $code));
         }
         // Nur die in dieser Protokollrevision definierten Daten übernehmen.
         return array_values(unpack('C*', substr($data, 0, $minimum)));

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+final class IiyamaLanCommandResponseException extends RuntimeException
+{
+}
+
 final class IiyamaLanProtocol
 {
     public bool $connected = false;
@@ -63,8 +67,11 @@ final class IiyamaLanProtocol
                     throw new RuntimeException('Ungültige Prüfsumme oder Antwort vom iiyama.');
                 }
                 $code = ord($body[1]);
-                if ($code === 0 && ($length !== 4 || ord($body[2]) !== 0)) {
-                    throw new RuntimeException('Der iiyama hat den Befehl abgelehnt (Antwort ' . bin2hex($body) . ').');
+                if ($code === 0 && $length !== 4) {
+                    throw new RuntimeException('Ungültige Befehlsbestätigung vom iiyama.');
+                }
+                if ($code === 0 && ord($body[2]) !== 0) {
+                    throw new IiyamaLanCommandResponseException('Der iiyama hat den Befehl abgelehnt (Antwort ' . bin2hex($body) . ').');
                 }
                 if ($expected === -1 || $expected === $code) {
                     return $response;

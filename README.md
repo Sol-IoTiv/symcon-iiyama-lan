@@ -40,7 +40,7 @@ Updates findest du in **Modules → Auf Aktualisierung prüfen**. Wenn die Bibli
 
 ## Status und Bedienung
 
-Das Abfrageintervall wird in Sekunden angegeben. **0** deaktiviert die automatische Abfrage. **Status aktualisieren** löst dieselbe Abfrage manuell aus. Das Modul fragt zuerst den Betriebszustand ab. Im eingeschalteten Zustand folgen Eingang, Ton, Bildwerte, Betriebsstunden, Farbtemperatur, Bildformat und Pixel Shift. Modell, Firmware und LAN-Protokollversion werden separat über **Geräteinformationen aktualisieren** abgefragt.
+Das Abfrageintervall wird in Sekunden angegeben. **0** deaktiviert die automatische Abfrage. **Status aktualisieren** löst dieselbe Abfrage manuell aus. Das Modul fragt zuerst den Betriebszustand ab. Im eingeschalteten Zustand folgen Eingang, Ton, Bildwerte, Betriebsstunden, Farbtemperatur, Bildformat und Pixel Shift. Bei abgelehnten oder unvollständigen Antworten werden die übrigen Statuswerte weiter abgefragt. Für die betroffenen Werte bleibt der letzte bestätigte Stand sichtbar. **Letzter Fehler** nennt die fehlgeschlagenen Abfragen. Modell, Firmware und LAN-Protokollversion werden separat über **Geräteinformationen aktualisieren** abgefragt.
 
 Unter **Bildschirm bedienen** stehen **Ein und HDMI 1**, **Ein und HDMI 2** und **Standby** bereit. Mit **HDMI 1** und **HDMI 2** wechselst du den Eingang direkt.
 
@@ -69,7 +69,6 @@ IIY_Standby(12345);
 IIY_EinHDMI1(12345);
 IIY_EinHDMI2(12345);
 IIY_EingangSetzen(12345, 6); // HDMI 2
-echo IIY_QuellcodeLesen(12345);
 IIY_LautstaerkeSetzen(12345, 20);
 IIY_AudioausgangSetzen(12345, 20);
 IIY_HelligkeitSetzen(12345, 30);

@@ -2,7 +2,7 @@
 
 Steuert iiyama-Displays über das binäre RS232/LAN-Protokoll per TCP. Das Modul kann den Bildschirm einschalten, in den Standby schalten, den Eingang wechseln, Geräte- und Statuswerte abfragen und Wochenzeitpläne im Display verwalten. Benötigt **IP-Symcon 7.0 oder neuer**.
 
-[Changelog](CHANGELOG.md)
+[Changelog](CHANGELOG.md) · [MIT-Lizenz](LICENSE)
 
 ## Kompatible Displays
 
@@ -81,12 +81,6 @@ echo IIY_HexSenden(12345, 'A6 01 00 00 00 03 01 19 BC', 0x19);
 ~~~
 
 Bei Hex-Befehlen gibt der dritte Parameter den erwarteten Antwortcode an. **0** wartet auf die Bestätigung eines Set-Befehls, **-1** nimmt die erste gültige Antwort. Der Hex-Rahmen muss die Monitor-ID der Instanz oder die Broadcast-ID **0** und eine gültige Prüfsumme enthalten. Bei Broadcast wird keine Antwort erwartet.
-
-## PDF-Wiedergabe und FTP
-
-FTP lässt sich am Display unter **System → Android-Einstellung → Anzeige der Beschilderung → Server-Einstellungen → FTP** aktivieren. Dort stehen Konto, Passwort, Speicherpfad und FTP-Port. Den Speicherort und die Wiedergabeliste des PDF-Players stellst du unter **Anzeige der Beschilderung → Quelleneinstellungen** ein. Der FTP-Schalter ist in der LAN-Befehlsliste nicht dokumentiert. Das Modul steuert den Eingang. Auf Displays mit eingebautem PDF-Player und der oben verlinkten Quellenbelegung ist der Aufruf `IIY_EingangSetzen(12345, 0x17)`.
-
-[iiyama-Handbuch, FTP und Quelleneinstellungen](https://iiyama.com/f/d20b8feb4feddf498dcc479896838547_lh-43-50-55-65-7566uhsb-usermanual-g.pdf#page=46)
 
 ## Fehler und weitere Modelle melden
 
